@@ -1,135 +1,130 @@
 describe("application modules", function(){
   "use strict";
 
-  describe("when specifying a module on an application", function(){
-    var MyApp, myModule, initializeBefore, initializeAfter;
+  describe("setting up a module and submodule", function() {
+    var MyApp, 
+      myModule, ModuleClass, initializeBefore, initializeAfter,
+      mySubModule, SubModuleClass, subInitializeBefore, subInitializeAfter;
 
-    beforeEach(function(){
+    beforeEach(function() {
       initializeBefore = jasmine.createSpy("before handler");
       initializeAfter = jasmine.createSpy("after handler");
-
-      MyApp = new Backbone.Marionette.Application();
-      myModule = MyApp.module("MyModule");
-      myModule.on("before:start", initializeBefore);
-      myModule.on("start", initializeAfter);
-
-      myModule.start();
+      subInitializeBefore = jasmine.createSpy("before handler");
+      subInitializeAfter = jasmine.createSpy("after handler");
     });
-
-    it("should notify me before initialization starts", function(){
-      expect(initializeBefore).toHaveBeenCalled();
-    });
-
-    it("should notify me after initialization", function(){
-      expect(initializeAfter).toHaveBeenCalled();
-    });
-
-    it("should add an object of that name to the app", function(){
-      expect(MyApp.MyModule).not.toBeUndefined();
-    });
-
-    it("should return the module", function(){
-      expect(myModule).toBe(MyApp.MyModule);
-    });
-  });
-
-  describe("when specifying a module on an application with a define function", function(){
-    var MyApp, ModuleClass, myModule, initializeBefore, initializeAfter;
-
-    beforeEach(function(){
-      initializeBefore = jasmine.createSpy("before handler");
-      initializeAfter = jasmine.createSpy("after handler");
-
-      MyApp = new Backbone.Marionette.Application();
-      myModule = MyApp.module("MyModule", function(MyModule, MyApp) {
-          MyModule.on("before:start", initializeBefore);
-          MyModule.on("start", initializeAfter);
+    
+    var tests = function() {
+      it("should notify me before initialization starts", function(){
+        expect(initializeBefore).toHaveBeenCalled();
       });
 
-      myModule.start();
-    });
-
-    it("should notify me before initialization starts", function(){
-      expect(initializeBefore).toHaveBeenCalled();
-    });
-
-    it("should notify me after initialization", function(){
-      expect(initializeAfter).toHaveBeenCalled();
-    });
-
-    it("should add an object of that name to the app", function(){
-      expect(MyApp.MyModule).not.toBeUndefined();
-    });
-
-    it("should return the module", function(){
-      expect(myModule).toBe(MyApp.MyModule);
-    });
-  });
-  describe("when specifying a module on an application with options object", function(){
-    var MyApp, ModuleClass, myModule, initializeBefore, initializeAfter;
-
-    beforeEach(function(){
-      initializeBefore = jasmine.createSpy("before handler");
-      initializeAfter = jasmine.createSpy("after handler");
-
-      MyApp = new Backbone.Marionette.Application();
-      ModuleClass = Backbone.Marionette.Module.extend({
-          onBeforeStart: initializeBefore,
-          onStart: initializeAfter
+      it("should notify me after initialization", function(){
+        expect(initializeAfter).toHaveBeenCalled();
       });
-      myModule = MyApp.module("MyModule", {moduleClass: ModuleClass});
 
-      myModule.start();
-    });
-
-    it("should notify me before initialization starts", function(){
-      expect(initializeBefore).toHaveBeenCalled();
-    });
-
-    it("should notify me after initialization", function(){
-      expect(initializeAfter).toHaveBeenCalled();
-    });
-
-    it("should add an object of that name to the app", function(){
-      expect(MyApp.MyModule).not.toBeUndefined();
-    });
-
-    it("should return the module", function(){
-      expect(myModule).toBe(MyApp.MyModule);
-    });
-  });
-
-  describe("when specifying a module on an application with a module class", function(){
-    var MyApp, ModuleClass, myModule, initializeBefore, initializeAfter;
-
-    beforeEach(function(){
-      initializeBefore = jasmine.createSpy("before handler");
-      initializeAfter = jasmine.createSpy("after handler");
-
-      MyApp = new Backbone.Marionette.Application();
-      ModuleClass = Backbone.Marionette.Module.extend({
-          onBeforeStart: initializeBefore,
-          onStart: initializeAfter
+      it("should add module to the app", function(){
+        expect(MyApp.MyModule).not.toBeUndefined();
       });
-      myModule = MyApp.module("MyModule", ModuleClass);
 
-      myModule.start();
+      it("should return the module", function(){
+        expect(myModule).toBe(MyApp.MyModule);
+      });
+
+      it("should notify me before subModule initialization starts", function(){
+        expect(subInitializeBefore).toHaveBeenCalled();
+      });
+
+      it("should notify me after subModule initialization", function(){
+        expect(subInitializeAfter).toHaveBeenCalled();
+      });
+
+      it("should add submodle to the app", function(){
+        expect(MyApp.MyModule.MySubModule).not.toBeUndefined();
+      });
+
+      it("should return the submodule", function(){
+        expect(mySubModule).toBe(MyApp.MyModule.MySubModule);
+      });
+    }
+
+    describe("when using default params", function() {
+      beforeEach(function() {
+        MyApp = new Backbone.Marionette.Application();
+        myModule = MyApp.module("MyModule");
+        mySubModule = MyApp.module("MyModule.MySubModule");
+
+        myModule.on("before:start", initializeBefore);
+        myModule.on("start", initializeAfter);
+        mySubModule.on("before:start", subInitializeBefore);
+        mySubModule.on("start", subInitializeAfter);
+
+        myModule.start();
+      });
+
+      tests();
     });
 
-    it("should notify me before initialization starts", function(){
-      expect(initializeBefore).toHaveBeenCalled();
+    describe("when using define function", function() {
+      beforeEach(function() {
+
+        MyApp = new Backbone.Marionette.Application();
+        myModule = MyApp.module("MyModule", function(MyModule, MyApp) {
+            MyModule.on("before:start", initializeBefore);
+            MyModule.on("start", initializeAfter);
+        });
+
+        mySubModule = MyApp.module("MyModule.MySubModule", function(MySubModule) {
+            MySubModule.on("before:start", subInitializeBefore);
+            MySubModule.on("start", subInitializeAfter);
+        });
+
+        myModule.start();
+      });
+
+      tests();
     });
 
-    it("should notify me after initialization", function(){
-      expect(initializeAfter).toHaveBeenCalled();
+    describe("when using an options object", function() {
+      beforeEach(function() {
+
+        ModuleClass = Backbone.Marionette.Module.extend({
+            onBeforeStart: initializeBefore,
+            onStart: initializeAfter
+        });
+
+        SubModuleClass = Backbone.Marionette.Module.extend({
+            onBeforeStart: subInitializeBefore,
+            onStart: subInitializeAfter
+        });
+
+        MyApp = new Backbone.Marionette.Application();
+        myModule = MyApp.module("MyModule", {moduleClass: ModuleClass});
+        mySubModule = MyApp.module("MyModule.MySubModule", {moduleClass: SubModuleClass});
+        myModule.start();
+      });
+
+      tests();
     });
 
-    it("should add an object of that name to the app", function(){
-      expect(MyApp.MyModule).not.toBeUndefined();
-    });
+    describe("when using a module class", function() {
+      beforeEach(function() {
+        ModuleClass = Backbone.Marionette.Module.extend({
+           onBeforeStart: initializeBefore,
+           onStart: initializeAfter
+        });
 
-    it("should return the module", function(){
-      expect(myModule).toBe(MyApp.MyModule);
+        SubModuleClass = Backbone.Marionette.Module.extend({
+           onBeforeStart: subInitializeBefore,
+           onStart: subInitializeAfter
+        });
+
+        MyApp = new Backbone.Marionette.Application();
+        myModule = MyApp.module("MyModule", ModuleClass);
+        mySubModule = MyApp.module("MyModule.MySubModule", SubModuleClass);
+        MyApp.start();
+      });
+
+      tests();
     });
   });
 

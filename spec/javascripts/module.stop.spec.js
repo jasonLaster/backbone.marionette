@@ -56,7 +56,6 @@ describe("module stop", function(){
     it("should not remove the module from it's parent module or application", function(){
       expect(App.module("Mod1")).toBe(mod1);
     });
-
   });
 
   describe("when stopping a module that has not been started", function(){
@@ -105,7 +104,6 @@ describe("module stop", function(){
     it("should run the finalizer", function(){
       expect(finalizer).toHaveBeenCalled();
     });
-
   });
 
 });

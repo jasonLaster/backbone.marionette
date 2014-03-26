@@ -3,7 +3,8 @@
 
 // A simple module system, used to create privacy and encapsulation in
 // Marionette applications
-Marionette.Module = function(moduleName, app, options){
+Marionette.Module = function(moduleName, app, options, parentModule){
+  this.parentModule = parentModule;
   this.moduleName = moduleName;
   this.options = _.extend({}, this.options, options);
   this.initialize = options.initialize || this.initialize;
@@ -20,7 +21,7 @@ Marionette.Module = function(moduleName, app, options){
   this.triggerMethod = Marionette.triggerMethod;
 
   if (_.isFunction(this.initialize)){
-    this.initialize(this.options, moduleName, app);
+    this.initialize(this.options, moduleName, app, parentModule);
   }
 };
 
@@ -167,7 +168,7 @@ _.extend(Marionette.Module, {
 
     if (!module){
       // Create a new module if we don't have one
-      module = new ModuleClass(moduleName, app, options);
+      module = new ModuleClass(moduleName, app, options, parentModule);
       parentModule[moduleName] = module;
       // store the module on the parent
       parentModule.submodules[moduleName] = module;

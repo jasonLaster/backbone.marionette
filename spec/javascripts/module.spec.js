@@ -105,7 +105,7 @@ describe("application modules", function(){
           });
 
           it('initialize function is called with arguments', function() {
-            expect(initializeSpy).toHaveBeenCalledWith(options, "Mod", app);
+            expect(initializeSpy).toHaveBeenCalledWith(options, "Mod", app, app);
           });
 
           it("prototype properties are defined", function() {
@@ -166,7 +166,7 @@ describe("application modules", function(){
           // this is a weird side effect of ModuleClass being treated as the define function
           // e.g. app.module('Mod', ModuleClass)
           var defOptions = _.extend({}, ModuleClass);
-          expect(initializeSpy).toHaveBeenCalledWith(defOptions, "Mod", app);
+          expect(initializeSpy).toHaveBeenCalledWith(defOptions, "Mod", app, app);
         });
 
         it("prototype properties", function() {
@@ -218,14 +218,22 @@ describe("application modules", function(){
       var parent, child, grandChild;
 
       describe("and the parent is already created", function() {
-        var parentDefineSpy, childDefineSpy;
+        var parentDefineSpy, childDefineSpy, initializeSpy, options;
 
         beforeEach(function() {
-          parentDefineSpy = jasmine.createSpy();
-          childDefineSpy = jasmine.createSpy();
+
+
+          parentDefineSpy = sinon.spy();
+          childDefineSpy = sinon.spy();
+          initializeSpy = sinon.spy();
+
+          options = {
+            define: childDefineSpy,
+            initialize: initializeSpy
+          }
 
           parent = app.module('parent', parentDefineSpy);
-          child = app.module('parent.child', childDefineSpy);
+          child = app.module('parent.child', options);
         });
 
         it("parent should remain the same", function() {
@@ -243,13 +251,25 @@ describe("application modules", function(){
         it("child definition should be called once", function() {
           expect(childDefineSpy.callCount).toBe(1);
         });
+
+        it('child initialize function is called with arguments', function() {
+          expect(initializeSpy).toHaveBeenCalledWith(options, "child", app, parent);
+        });
+
       });
 
       describe("and the parent is not already created", function() {
-        var defineSpy;
+        var defineSpy, initializeSpy, options;
         beforeEach(function() {
           defineSpy = jasmine.createSpy();
-          child = app.module('parent.child', defineSpy);
+          initializeSpy = sinon.spy();
+
+          options = {
+            define: defineSpy,
+            initialize: initializeSpy
+          }
+
+          child = app.module('parent.child', options);
         });
 
         it("parent should be defined", function() {
@@ -262,7 +282,11 @@ describe("application modules", function(){
 
         it("definition should be called once", function() {
           expect(defineSpy.callCount).toBe(1);
-        })
+        });
+
+        it('child initialize function is called with arguments', function() {
+          expect(initializeSpy).toHaveBeenCalledWith(options, "child", app, app.parent);
+        });
       });
     });
   });

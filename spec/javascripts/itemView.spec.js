@@ -219,7 +219,7 @@ describe("item view", function(){
 
       onBeforeClose: function(){},
 
-      onClose: function(){ }
+      onDestroy: function(){ }
     });
 
     var view;
@@ -243,13 +243,13 @@ describe("item view", function(){
       spyOn(view, "modelChange").andCallThrough();
       spyOn(view, "collectionChange").andCallThrough();
       spyOn(view, "onBeforeClose").andCallThrough();
-      spyOn(view, "onClose").andCallThrough();
+      spyOn(view, "onDestroy").andCallThrough();
       spyOn(view, "trigger").andCallThrough();
 
       view.listenTo(model, "change:foo", view.modelChange);
       view.listenTo(collection, "foo", view.collectionChange);
 
-      view.close();
+      view.destroy();
 
       model.set({foo: "bar"});
       collection.trigger("foo");
@@ -271,20 +271,20 @@ describe("item view", function(){
       expect(view.remove).toHaveBeenCalled();
     });
 
-    it("should trigger 'item:before:close'", function(){
-      expect(view.trigger).toHaveBeenCalledWith("item:before:close");
+    it("should trigger 'item:before:destroy'", function(){
+      expect(view.trigger).toHaveBeenCalledWith("item:before:destroy");
     });
 
-    it("should trigger 'item:closed", function(){
-      expect(view.trigger).toHaveBeenCalledWith("item:closed");
+    it("should trigger 'item:destroyed", function(){
+      expect(view.trigger).toHaveBeenCalledWith("item:destroyed");
     });
 
     it("should call `onBeforeClose` if provided", function(){
       expect(view.onBeforeClose).toHaveBeenCalled();
     });
 
-    it("should call `onClose` if provided", function(){
-      expect(view.onClose).toHaveBeenCalled();
+    it("should call `onDestroy` if provided", function(){
+      expect(view.onDestroy).toHaveBeenCalled();
     });
   });
 

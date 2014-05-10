@@ -15,7 +15,7 @@ describe("composite view - on before render", function(){
     });
 
     Label.Views.LabelItem = Backbone.Marionette.ItemView.extend({
-        template: "#itemView",
+        template: "#childView",
         tagName: 'li',
         className: 'list-item'
     });
@@ -24,9 +24,9 @@ describe("composite view - on before render", function(){
 
     Label.Views.LabelList = Backbone.Marionette.CompositeView.extend({
       template: "#compView",
-      itemViewContainer: '#listTag',
+      childViewContainer: '#listTag',
 
-      itemView: Label.Views.LabelItem,
+      childView: Label.Views.LabelItem,
 
       onBeforeRender : function() {
         this.model.set("modelState", "Something Different");
@@ -34,7 +34,7 @@ describe("composite view - on before render", function(){
     });
 
     beforeEach(function(){
-      setFixtures("<script id='itemView' type='text/template'>Title: <%= title %> </script><script id='compView' type='text/template'><div class='listing'> <h4><%= modelState %></h4> <br/> <ul id='listTag'> </ul> </div></script>");
+      setFixtures("<script id='childView' type='text/template'>Title: <%= title %> </script><script id='compView' type='text/template'><div class='listing'> <h4><%= modelState %></h4> <br/> <ul id='listTag'> </ul> </div></script>");
 
       var collection = new Label.Collection([{ title: 'yoddle' }, { title: 'little' }]);
       var model = new Label.Model({ modelState: 'Yoddling Tomes' });

@@ -7,18 +7,18 @@ describe("closing views", function(){
 
     beforeEach(function(){
       view = new View();
-      view.onBeforeClose = jasmine.createSpy("before close");
+      view.onBeforeClose = jasmine.createSpy("before destroy");
 
-      view.close();
-      view.close();
+      view.destroy();
+      view.destroy();
     });
 
     it("should only run the closing code once", function(){
       expect(view.onBeforeClose).toHaveBeenCalled();
     });
 
-    it("should mark the view as closed", function(){
-      expect(view.isClosed).toBe(true);
+    it("should mark the view as destroyed", function(){
+      expect(view.isDestroyed).toBe(true);
     });
   });
 
@@ -28,22 +28,22 @@ describe("closing views", function(){
 
     beforeEach(function(){
       view = new View();
-      view.onBeforeClose = jasmine.createSpy("before close");
+      view.onBeforeClose = jasmine.createSpy("before destroy");
 
-      view.close();
-      view.close();
+      view.destroy();
+      view.destroy();
     });
 
     it("should only run the closing code once", function(){
       expect(view.onBeforeClose).toHaveBeenCalled();
     });
 
-    it("should mark the view as closed", function(){
-      expect(view.isClosed).toBe(true);
+    it("should mark the view as destroyed", function(){
+      expect(view.isDestroyed).toBe(true);
     });
   });
 
-  describe("when rendering a Marionette.ItemView that was previously closed", function(){
+  describe("when rendering a Marionette.ItemView that was previously destroyed", function(){
     var View = Marionette.ItemView.extend({
       template: function(){}
     });
@@ -51,14 +51,14 @@ describe("closing views", function(){
 
     beforeEach(function(){
       view = new View();
-      view.onBeforeClose = jasmine.createSpy("before close");
+      view.onBeforeClose = jasmine.createSpy("before destroy");
 
-      view.close();
+      view.destroy();
       view.render();
     });
 
-    it("should mark the view as not closed", function(){
-      expect(view.isClosed).toBe(false);
+    it("should mark the view as not destroyed", function(){
+      expect(view.isDestroyed).toBe(false);
     });
   });
 
@@ -68,41 +68,41 @@ describe("closing views", function(){
 
     beforeEach(function(){
       view = new View();
-      view.onBeforeClose = jasmine.createSpy("before close");
+      view.onBeforeClose = jasmine.createSpy("before destroy");
 
-      view.close();
-      view.close();
+      view.destroy();
+      view.destroy();
     });
 
     it("should only run the closing code once", function(){
       expect(view.onBeforeClose).toHaveBeenCalled();
     });
 
-    it("should mark the view as closed", function(){
-      expect(view.isClosed).toBe(true);
+    it("should mark the view as destroyed", function(){
+      expect(view.isDestroyed).toBe(true);
     });
   });
 
-  describe("when rendering a Marionette.CollectionView that was previously closed", function(){
+  describe("when rendering a Marionette.CollectionView that was previously destroyed", function(){
     var ItemView = Marionette.ItemView.extend({
       template: function(){}
     });
 
     var CollectionView = Marionette.CollectionView.extend({
-      itemView: ItemView
+      childView: ItemView
     });
     var view;
 
     beforeEach(function(){
       view = new CollectionView();
-      view.onBeforeClose = jasmine.createSpy("before close");
+      view.onBeforeClose = jasmine.createSpy("before destroy");
 
-      view.close();
+      view.destroy();
       view.render();
     });
 
-    it("should mark the view as not closed", function(){
-      expect(view.isClosed).toBe(false);
+    it("should mark the view as not destroyed", function(){
+      expect(view.isDestroyed).toBe(false);
     });
   });
 
@@ -112,42 +112,42 @@ describe("closing views", function(){
 
     beforeEach(function(){
       view = new View();
-      view.onBeforeClose = jasmine.createSpy("before close");
+      view.onBeforeClose = jasmine.createSpy("before destroy");
 
-      view.close();
-      view.close();
+      view.destroy();
+      view.destroy();
     });
 
     it("should only run the closing code once", function(){
       expect(view.onBeforeClose).toHaveBeenCalled();
     });
 
-    it("should mark the view as closed", function(){
-      expect(view.isClosed).toBe(true);
+    it("should mark the view as destroyed", function(){
+      expect(view.isDestroyed).toBe(true);
     });
   });
 
-  describe("when rendering a Marionette.CompositeView that was previously closed", function(){
+  describe("when rendering a Marionette.CompositeView that was previously destroyed", function(){
     var ItemView = Marionette.ItemView.extend({
       template: function(){}
     });
 
     var CompositeView = Marionette.CompositeView.extend({
       template: function(){},
-      itemView: ItemView
+      childView: ItemView
     });
     var view;
 
     beforeEach(function(){
       view = new CompositeView();
-      view.onBeforeClose = jasmine.createSpy("before close");
+      view.onBeforeClose = jasmine.createSpy("before destroy");
 
-      view.close();
+      view.destroy();
       view.render();
     });
 
-    it("should mark the view as not closed", function(){
-      expect(view.isClosed).toBe(false);
+    it("should mark the view as not destroyed", function(){
+      expect(view.isDestroyed).toBe(false);
     });
   });
 

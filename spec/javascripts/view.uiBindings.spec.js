@@ -140,7 +140,7 @@ describe("view ui elements", function() {
 
     beforeEach(function(){
       view1 = new View();
-      view1.close();
+      view1.destroy();
       view2 = new View();
     });
 
@@ -165,7 +165,7 @@ describe("view ui elements", function() {
       view = new View();
       view.render();
 
-      view.close();
+      view.destroy();
     });
 
     it("should unbind UI elements and reset them to the selector", function(){
@@ -189,7 +189,7 @@ describe("view ui elements", function() {
       view = new View();
 
       view.render();
-      view.close();
+      view.destroy();
 
       view.render();
     });

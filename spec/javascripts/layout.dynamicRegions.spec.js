@@ -140,17 +140,17 @@ describe("layout - dynamic regions", function(){
 
   describe("when removing a region from a layout", function(){
     var Layout;
-    var layout, region, closeHandler, removeHandler;
+    var layout, region, destroyHandler, removeHandler;
 
     beforeEach(function(){
-      Layout = Marionette.Layout.extend({
+      Layout = Marionette.LayoutView.extend({
         template: template,
         regions: {
           foo: "#foo"
         }
       });
 
-      closeHandler = jasmine.createSpy("close handler");
+      destroyHandler = jasmine.createSpy("destroy handler");
       removeHandler = jasmine.createSpy("remove handler");
 
       layout = new Layout();
@@ -159,14 +159,14 @@ describe("layout - dynamic regions", function(){
       layout.foo.show(new Backbone.View());
       region = layout.foo;
 
-      region.on("close", closeHandler);
+      region.on("destroy", destroyHandler);
       layout.on("region:remove", removeHandler);
 
       layout.removeRegion("foo");
     });
 
-    it("should close the region", function(){
-      expect(closeHandler).toHaveBeenCalled();
+    it("should destroy the region", function(){
+      expect(destroyHandler).toHaveBeenCalled();
     });
 
     it("should trigger a region:remove event", function(){
@@ -181,14 +181,14 @@ describe("layout - dynamic regions", function(){
   });
 
   describe("when removing a region and then re-rendering the layout", function(){
-    var Layout = Marionette.Layout.extend({
+    var Layout = Marionette.LayoutView.extend({
       template: template,
       regions: {
         foo: "#foo"
       }
     });
 
-    var layout, region, closeHandler, removeHandler;
+    var layout, region, destroyHandler, removeHandler;
 
     beforeEach(function(){
       layout = new Layout();
@@ -209,10 +209,10 @@ describe("layout - dynamic regions", function(){
   });
 
   describe("when adding a region to a layout then closing the layout", function(){
-    var layout, region, view, closeHandler;
+    var layout, region, view, destroyHandler;
 
     beforeEach(function(){
-      closeHandler = jasmine.createSpy("add handler");
+      destroyHandler = jasmine.createSpy("add handler");
       layout = new Marionette.Layout({
         template: template
       });
@@ -220,16 +220,16 @@ describe("layout - dynamic regions", function(){
       layout.render();
 
       region = layout.addRegion("foo", "#foo");
-      region.on("close", closeHandler);
+      region.on("destroy", destroyHandler);
 
       var view = new Backbone.View();
       layout.foo.show(view);
 
-      layout.close();
+      layout.destroy();
     });
 
-    it("should close the region", function(){
-      expect(closeHandler).toHaveBeenCalled();
+    it("should destroy the region", function(){
+      expect(destroyHandler).toHaveBeenCalled();
     });
   });
 });

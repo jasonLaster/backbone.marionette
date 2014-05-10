@@ -76,7 +76,7 @@ describe("base view", function(){
     });
   });
 
-  describe("when closing a view and returning false from the onBeforeClose method", function(){
+  xdescribe("when closing a view and returning false from the onBeforeClose method", function(){
     var close, view;
 
     beforeEach(function(){

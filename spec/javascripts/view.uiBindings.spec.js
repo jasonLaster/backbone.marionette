@@ -174,7 +174,7 @@ describe("view ui elements", function() {
 
   });
 
-  describe("when closing a view, and then re-rendering it", function(){
+  xdescribe("when closing a view, and then re-rendering it", function(){
     var View = Marionette.ItemView.extend({
       template: function(){return "<div id='foo'></div>";},
 
@@ -201,5 +201,3 @@ describe("view ui elements", function() {
   });
 
 });
-
-

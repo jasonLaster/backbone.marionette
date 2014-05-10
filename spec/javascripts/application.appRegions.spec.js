@@ -1,58 +1,42 @@
-describe('application regions', function() {
-  'use strict';
+describe("application regions", function(){
+  "use strict";
 
-  describe('when adding region selectors to an app, and starting the app', function() {
-    var MyApp, addHandler, beforeAddHandler;
+  describe("when adding region selectors to an app, and starting the app", function(){
+    var MyApp = new Backbone.Marionette.Application();
 
-    MyApp = new Backbone.Marionette.Application();
-
-    beforeEach(function() {
-      setFixtures('<div id="region"></div>');
-      setFixtures('<div id="region2"></div>');
-
-      beforeAddHandler = sinon.spy();
-      addHandler = sinon.spy();
-
-      MyApp.on('before:add:region', beforeAddHandler);
-      MyApp.on('add:region', addHandler);
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+      setFixtures("<div id='region2'></div>");
 
       MyApp.addRegions({
-        MyRegion: '#region',
-        anotherRegion: 'region2'
+        MyRegion: "#region",
+        anotherRegion: "region2"
       });
 
       MyApp.start();
     });
 
-    it('should initialize the regions', function() {
+    it("should initialize the regions", function(){
       expect(MyApp.MyRegion).not.toBeUndefined();
       expect(MyApp.anotherRegion).not.toBeUndefined();
     });
-
-    it('should trigger a before:add:region event', function() {
-      expect(beforeAddHandler).toHaveBeenCalledWith('MyRegion');
-    });
-
-    it('should trigger a add:region event', function() {
-      expect(addHandler).toHaveBeenCalledWith('MyRegion');
-    });
   });
 
-  describe('when adding region objects to an app', function() {
+  describe("when adding region objects to an app", function(){
     var MyApp = new Backbone.Marionette.Application();
 
     var MyRegion = Backbone.Marionette.Region.extend({
-      el: '#region',
-      Foooooooo: 'bar'
+      el: "#region",
+      Foooooooo: "bar"
     });
 
     var MyRegion2 = Backbone.Marionette.Region.extend({
-      el: '#region2'
+      el: "#region2"
     });
 
-    beforeEach(function() {
-      setFixtures('<div id="region"></div>');
-      setFixtures('<div id="region2"></div>');
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+      setFixtures("<div id='region2'></div>");
 
       MyApp.addRegions({
         MyRegion: MyRegion,
@@ -60,131 +44,95 @@ describe('application regions', function() {
       });
     });
 
-    it('should initialize the regions, immediately', function() {
+    it("should initialize the regions, immediately", function(){
       expect(MyApp.MyRegion instanceof MyRegion).toBe(true);
       expect(MyApp.anotherRegion instanceof MyRegion2).toBe(true);
     });
   });
 
-  describe('when adding custom region classes to an app, with selectors', function() {
+  describe("when adding custom region types to an app, with selectors", function(){
     var MyApp = new Backbone.Marionette.Application();
     var MyRegion = Backbone.Marionette.Region.extend({});
 
-    beforeEach(function() {
-      setFixtures('<div id="region"></div>');
-      setFixtures('<div id="region2"></div>');
+    beforeEach(function(){
+      setFixtures("<div id='region'></div>");
+      setFixtures("<div id='region2'></div>");
 
       MyApp.addRegions({
         MyRegion: {
           selector: '#region',
-          regionClass: MyRegion,
+          regionType: MyRegion,
           specialOption: true
         }
       });
     });
 
-    it('should initialize the regions, immediately', function() {
+    it("should initialize the regions, immediately", function(){
       expect(MyApp.MyRegion).not.toBeUndefined();
     });
 
-    it('should create an instance of the specified region class', function() {
+    it("should create an instance of the specified region type", function(){
       expect(MyApp.MyRegion).toBeInstanceOf(MyRegion);
     });
 
-    it('should set the specified selector', function() {
-      expect(MyApp.MyRegion.$el.selector).toBe('#region');
+    it("should set the specified selector", function(){
+      expect(MyApp.MyRegion.el).toBe("#region");
     });
 
-    it('should pass extra options to the custom regionClass', function() {
-      expect(MyApp.MyRegion).toHaveOwnProperty('options');
-      expect(MyApp.MyRegion.options).toHaveOwnProperty('specialOption');
+    it("should pass extra options to the custom regionType", function() {
+      expect(MyApp.MyRegion).toHaveOwnProperty("options");
+      expect(MyApp.MyRegion.options).toHaveOwnProperty("specialOption");
       expect(MyApp.MyRegion.options.specialOption).toBeTruthy();
     });
   });
 
-  describe('when an app has a region', function() {
-    var app;
+  describe("when an app has a region", function(){
+    var app, reg1;
 
-    beforeEach(function() {
+    beforeEach(function(){
       app = new Marionette.Application();
       app.addRegions({
-        r1: '#region1'
+        r1: "#region1"
       });
+
     });
 
-    it('should make the region available as a named attribute', function() {
+    it("should make the region available as a named attribute", function(){
       expect(app.r1).not.toBeUndefined();
     });
 
-    it('should be able to retrieve the region', function() {
-      expect(app.getRegion('r1')).toBe(app.r1);
+    it("should be able to retrieve the region", function(){
+      expect(app.getRegion("r1")).toBe(app.r1);
     });
   });
 
-  describe('when destroying all regions in the app', function() {
+  describe("when closing all regions in the app", function(){
     var r1, r2;
 
-    beforeEach(function() {
+    beforeEach(function(){
       var app = new Backbone.Marionette.Application();
 
-      setFixtures('<div id="region"></div>');
-      setFixtures('<div id="r2"></div>');
+      setFixtures("<div id='region'></div>");
+      setFixtures("<div id='r2'></div>");
 
       app.addRegions({
-        myRegion: '#region',
-        r2: '#r2'
+        myRegion: "#region",
+        r2: "#r2"
       });
 
       r1 = app.myRegion;
       r2 = app.r2;
+      spyOn(r1, "close").andCallThrough();
+      spyOn(r2, "close").andCallThrough();
 
-      spyOn(r1, 'destroy').andCallThrough();
-      spyOn(r2, 'destroy').andCallThrough();
-
-      app.destroyRegions();
+      app.closeRegions();
     });
 
-    it('should destroy the regions', function() {
-      expect(r1.destroy).toHaveBeenCalled();
-      expect(r2.destroy).toHaveBeenCalled();
-    });
-  });
 
-  describe('when removing a region', function() {
-    var MyApp, removeHandler, beforeRemoveHandler;
-
-    MyApp = new Backbone.Marionette.Application();
-
-    beforeEach(function() {
-      setFixtures('<div id="region"></div>');
-      setFixtures('<div id="region2"></div>');
-
-      beforeRemoveHandler = sinon.spy();
-      removeHandler = sinon.spy();
-
-      MyApp.on('before:remove:region', beforeRemoveHandler);
-      MyApp.on('remove:region', removeHandler);
-
-      MyApp.addRegions({
-        MyRegion: '#region',
-        anotherRegion: 'region2'
-      });
-
-      MyApp.start();
-
-      MyApp.removeRegion('MyRegion');
-    });
-
-    it('should remove the region', function() {
-      expect(MyApp.MyRegion).toBeUndefined();
-    });
-
-    it('should trigger a before:remove:region event', function() {
-      expect(beforeRemoveHandler).toHaveBeenCalledWith('MyRegion');
-    });
-
-    it('should trigger a remove:region event', function() {
-      expect(removeHandler).toHaveBeenCalledWith('MyRegion');
+    it("should close the regions", function(){
+      expect(r1.close).toHaveBeenCalled();
+      expect(r2.close).toHaveBeenCalled();
     });
   });
+
 });

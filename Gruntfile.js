@@ -146,7 +146,7 @@ module.exports = function(grunt) {
         // 'spec/javascripts/compositeView.spec.js',
         // 'spec/javascripts/itemView.spec.js',  (proxied methods)
         // 'spec/javascripts/layout.dynamicRegions.spec.js',
-        // 'spec/javascripts/layout.spec.js',                       // jquery
+    'spec/javascripts/layout.spec.js',                       // jquery
         // 'spec/javascripts/region.spec.js',
         // 'spec/javascripts/regionManager.spec.js', (probably the new exception)
         'spec/javascripts/appRouter.spec.js',

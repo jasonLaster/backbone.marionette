@@ -147,7 +147,7 @@ describe('layoutView', function() {
     var layoutViewManager;
 
     beforeEach(function() {
-      loadFixtures('layoutViewManagerTemplate.html');
+      loadFixtures('layoutManagerTemplate.html');
       layoutViewManager = new LayoutView();
       layoutViewManager.render();
     });
@@ -163,7 +163,7 @@ describe('layoutView', function() {
     var layoutViewManager, regionOne, regionTwo;
 
     beforeEach(function() {
-      loadFixtures('layoutViewManagerTemplate.html');
+      loadFixtures('layoutManagerTemplate.html');
       layoutViewManager = new LayoutView();
       layoutViewManager.render();
 
@@ -192,7 +192,7 @@ describe('layoutView', function() {
 
     beforeEach(function() {
       setFixtures('<div id="mgr"></div>');
-      appendLoadFixtures('layoutViewManagerTemplate.html');
+      appendLoadFixtures('layoutManagerTemplate.html');
 
       layoutView = new LayoutView();
       layoutView.onRender = function() {
@@ -224,7 +224,7 @@ describe('layoutView', function() {
     var region, layoutView, view, destroyRegionsSpy;
 
     beforeEach(function() {
-      loadFixtures('layoutViewManagerTemplate.html');
+      loadFixtures('layoutManagerTemplate.html');
 
       layoutView = new LayoutView({
         model: new Backbone.Model()
@@ -270,7 +270,7 @@ describe('layoutView', function() {
     var region, layoutView, view;
 
     beforeEach(function() {
-      loadFixtures('layoutViewManagerTemplate.html');
+      loadFixtures('layoutManagerTemplate.html');
 
       layoutView = new LayoutView();
       layoutView.render();

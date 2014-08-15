@@ -1,0 +1,47 @@
+name: Compositeview
+class: Marionette.Compositeview
+description:
+examples:
+properties:
+functions:
+  constructor:|
+
+  _initialEvents:|
+    @api private
+
+  getChildView:|
+    @api public
+    @param {} child
+
+  serializeData:|
+    @api public
+
+  render:|
+    @api public
+
+  _renderChildren:|
+    @api private
+
+  _renderTemplate:|
+    @api private
+    @param {} html
+
+  attachElContent:|
+    @api public
+    @param {} html
+
+  attachBuffer:|
+    @api public
+    @param {} compositeView
+    @param {} buffer
+
+  _insertAfter:|
+    @api private
+    @param {} childView
+
+  getChildViewContainer:|
+    @api public
+    @param {} containerView
+
+  resetChildViewContainer:|
+    @api public

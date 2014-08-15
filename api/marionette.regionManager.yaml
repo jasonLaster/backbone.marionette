@@ -1,0 +1,52 @@
+name: RegionManager
+class: Marionette.RegionManager
+description:
+examples:
+properties:
+
+functions:
+    constructor:|
+      @param {Object} options
+
+    addRegions:|
+      @api public
+      @param {Function|Object} regionDefinitions
+      @param {Object} defaults
+
+    addRegion:|
+      @api public
+      @param {String} name
+      @param {} definition
+
+    get:|
+      @api public
+      @param {String} name
+
+    getRegions:|
+      @api public
+
+    removeRegion:|
+      @api public
+      @param {String} name
+
+    removeRegions:|
+      @api public
+
+    emptyRegions:|
+      @api public
+
+    destroy:|
+      @api public
+
+    _store:|
+      @api private 
+      @param {String} name
+      @param {Marionette.Region} region
+
+    _remove:|
+      @api private 
+      @param {String} name
+      @param {Marionette.Region} region
+
+    _setLength:|
+      @api private 

@@ -1,0 +1,11 @@
+name: Behavior
+class: Marionette.Behavior
+description:
+examples:
+properties:
+functions:
+  initialize:|
+    @api public
+
+  destroy:|
+    @api public

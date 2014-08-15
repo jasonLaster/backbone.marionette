@@ -1,0 +1,142 @@
+name: Collectionview
+class: Marionette.Collectionview
+description:
+examples:
+properties:
+functions:
+  constructor:|
+    @param {Object} options
+
+  initRenderBuffer:|
+    @api public
+
+  startBuffering:|
+    @api public
+
+  endBuffering:|
+    @api public
+
+  _triggerBeforeShowBufferedChildren:|
+    @api private 
+
+  _triggerShowBufferedChildren:|
+    @api private 
+
+  _initialEvents:|
+    @api private
+
+  _onCollectionAdd:|
+    @api private
+    @param {Marionette.Model} child
+
+  _onCollectionRemove:|
+    @api private
+    @param {Marionette.Model} model
+
+  onShowCalled:|
+    @api public
+
+  render:|
+    @api public
+
+  resortView:|
+    @api public
+
+  _sortViews:|
+    @api private
+
+  _renderChildren:|
+    @api private
+
+  showCollection:|
+    @api public
+
+  showEmptyView:|
+    @api public
+
+  destroyEmptyView:|
+    @api public
+
+  getEmptyView:|
+    @api public
+
+  addEmptyView:|
+    @api public
+    @param {Marionette.Model} child
+    @param {Marionette.View} EmptyView
+
+  getChildView:|
+    @api public
+    @param {Marionette.Model} child
+
+  addChild:|
+    @api public
+    @param {Marionette.Model} child
+    @param {Marionette.View} ChildView
+    @param {Number} index
+
+  _updateIndices:|
+    @api private
+    @param {Marionette.View} view
+    @param {Boolean} increment
+    @param {Number} index
+
+  _addChildView:|
+    @api private
+    @param {Marionette.View} view
+    @param {Number} index
+
+  renderChildView:|
+    @api public
+    @param {Marionette.View} view
+    @param {Number} index
+
+  buildChildView:|
+    @api public
+    @param {Marionette.Model} child
+    @param {Marionette.View} ChildViewClass
+    @param {Object} childViewOptions
+
+  removeChildView:|
+    @api public
+    @param {Marionette.View} view
+
+  isEmpty:|
+    @api public
+    @param {Marionette.Collection} collection
+
+  checkEmpty:|
+    @api public
+
+  attachBuffer:|
+    @api public
+    @param {Marionette.Collectionview} collectionView
+    @param {} buffer
+
+  attachHtml:|
+    @api public
+    @param {Marionette.Collectionview} collectionView
+    @param {Marionette.View} childView
+    @param {Number} index
+
+  _insertBefore:|
+    @api private
+    @param {Marionette.View} childView
+    @param {Number} index
+
+  _insertAfter:|
+    @api private
+    @param {Marionette.View} childView
+
+  _initChildViewStorage:|
+    @api private
+
+  destroy:|
+    @api public
+
+  destroyChildren:|
+    @api public
+
+  proxyChildEvents:|
+    @api public
+    @param {Marionette.View} view

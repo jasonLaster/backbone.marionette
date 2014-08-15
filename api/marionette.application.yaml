@@ -1,0 +1,57 @@
+name: Appliction
+class: Marionette.Application
+description:
+examples:
+properties:
+functions:
+  execute:|
+    @api public
+
+  request:|
+    @api public
+
+  addInitializer:|
+    @api public
+    @param {} initializer
+
+  start:|
+    @api public
+    @param {Object} options
+
+  addRegions:|
+    @api public
+    @param {} regions
+
+  emptyRegions:|
+    @api public
+
+  removeRegion:|
+    @api public
+    @param {} region
+
+  getRegion:|
+    @api public
+    @param {} region
+
+  getRegions:|
+    @api public
+
+  module:|
+    @api public
+    @param {} moduleNames
+    @param {} moduleDefinition
+
+  getRegionManager:|
+    @api public
+
+  _initializeRegions:|
+    @api public
+    @param {} options
+
+  _initRegionManager:|
+    @api public
+
+  _initChannel:|
+    @api public
+
+

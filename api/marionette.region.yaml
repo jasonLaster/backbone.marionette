@@ -1,6 +1,5 @@
 name: Region
-
-namespace: Marionette
+class: Marionette.Region
 
 description:|
 
@@ -32,25 +31,25 @@ functions:
     
     @api public
     @static
-    @param {} regionConfig
-    @param {} DefaultRegionClass
+    @param {Object} regionConfig
+    @param {Marionette.Region} DefaultRegionClass
 
   _buildRegionFromSelector:|
     @api private
     @static
-    @param {} selector
-    @param {} DefaultRegionClass
+    @param {String} selector
+    @param {Marionette.Region} DefaultRegionClass
 
   _buildRegionFromObject:|
     @api private
     @static
-    @param {} regionConfig
-    @param {} DefaultRegionClass
+    @param {Object} regionConfig
+    @param {Marionette.Region} DefaultRegionClass
 
   _buildRegionFromRegionClass:|
     @api private
     @static
-    @param {} RegionClass
+    @param {Marionette.Region} RegionClass
 
   show:|
     Shows `newView` inside the region if it isn't already shown. The previous view, if one exists,
@@ -70,8 +69,8 @@ functions:
     
     @api public
     @static
-    @param {} view
-    @param {} options
+    @param {Marionette.View} view
+    @param {Object} options
 
   _ensureElement:|
     @api private
@@ -92,7 +91,7 @@ functions:
     refer to the guide on animated regions.
     
     @api private
-    @param {} view
+    @param {Marionette.View} view
 
   empty:|
     Empty calls `destroy` on the `currentView`. This has the consequence of clearing the contents
@@ -108,7 +107,7 @@ functions:
     show, or fire any events.
     
     @api private
-    @param {} view
+    @param {Marionette.View} view
 
   hasView:|
     @api public

@@ -293,16 +293,29 @@ module.exports = function(grunt) {
         } catch (err){ 
           grunt.fail.fatal(err.name + ":\n"+  err.reason + "\n\n" + err.mark);
         }
-        
-        // parse jsDoc comment
-        _.each(json.functions, function(docString, name) {
-          var doc = dox.parseComment(docString);
+
+        // parse function values
+        _.each(json.functions, function(value, name) {
+          var result = {};
+
+          // Function values have both a description and examples
+          // If the function value is a string, only the description was added
+          if (_.isObject(value)) {
+            result = value;
+          } else {
+            result.examples = [];
+            result.description = value;
+          }
+
+          // parse jsDoc comment
+          var doc = dox.parseComment(result.description);
 
           var tags = doc.tags || [];
           doc.api = _.findWhere(tags, {type: 'api'});
           doc.params = _.where(tags, {type: 'param'});
-          
-          json.functions[name] = doc;
+
+          result.description = doc;
+          json.functions[name] = result;
         });
 
         // write parsed api to file

@@ -1,8 +1,5 @@
 var path = require('path');
 var unwrap = require('unwrap');
-var dox = require('dox');
-var _ = require('underscore');
-var yaml = require('js-yaml')
 
 module.exports = function(grunt) {
 
@@ -279,51 +276,9 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerMultiTask('jsDocFiles', function() {
-    this.files.forEach(function(f) {
-      f.src.filter(function(filepath) {
-        return grunt.file.exists(filepath) && !grunt.file.isDir(filepath);
-      }).map(function(filepath) {
+  // grunt.registerMultiTask('jsDocFiles', jsDocFiles);
+  grunt.loadTasks('tasks');
 
-        // read yaml file
-        var file = grunt.file.read(filepath);
-
-        try {
-          var json = yaml.safeLoad(file);
-        } catch (err){ 
-          grunt.fail.fatal(err.name + ":\n"+  err.reason + "\n\n" + err.mark);
-        }
-
-        // parse function values
-        _.each(json.functions, function(value, name) {
-          var result = {};
-
-          // Function values have both a description and examples
-          // If the function value is a string, only the description was added
-          if (_.isObject(value)) {
-            result = value;
-          } else {
-            result.examples = [];
-            result.description = value;
-          }
-
-          // parse jsDoc comment
-          var doc = dox.parseComment(result.description);
-
-          var tags = doc.tags || [];
-          doc.api = _.findWhere(tags, {type: 'api'});
-          doc.params = _.where(tags, {type: 'param'});
-
-          result.description = doc;
-          json.functions[name] = result;
-        });
-
-        // write parsed api to file
-        var prettyJSON = JSON.stringify(json, undefined, 2);
-        grunt.file.write(f.dest, prettyJSON);
-      });
-    });
-  });
 
   grunt.registerTask('verify-bower', function () {
     if (!grunt.file.isDir('./bower_components')) {

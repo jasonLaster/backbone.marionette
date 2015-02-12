@@ -254,9 +254,6 @@ Marionette.CollectionView = Marionette.View.extend({
     // build the empty view
     var view = this.buildChildView(child, EmptyView, emptyViewOptions);
 
-    // Proxy emptyView events
-    //this.proxyChildEvents(view);
-
     // trigger the 'before:show' event on `view` if the collection view
     // has already been shown
     if (this._isShown) {
@@ -339,9 +336,6 @@ Marionette.CollectionView = Marionette.View.extend({
   // Internal Method. Add the view to children and render it at
   // the given index.
   _addChildView: function(view, index) {
-    // set up the child view event forwarding
-    // this.proxyChildEvents(view);
-
     this.triggerMethod('before:add:child', view);
 
     // trigger the 'before:show' event on `view` if the collection view
@@ -496,30 +490,6 @@ Marionette.CollectionView = Marionette.View.extend({
     this.children.each(this.removeChildView, this);
     this.checkEmpty();
     return childViews;
-  },
-
-  // Set up the child view event forwarding. Uses a "childview:"
-  // prefix in front of all forwarded events.
-  proxyChildEvents: function(view) {
-    var prefix = this.getOption('childViewEventPrefix');
-
-    // Forward all child view events through the parent,
-    // prepending "childview:" to the event name
-    this.listenTo(view, 'all', function() {
-      var args = _.toArray(arguments);
-      var rootEvent = args[0];
-      var childEvents = this.normalizeMethods(_.result(this, 'childEvents'));
-
-      args[0] = prefix + ':' + rootEvent;
-      args.splice(1, 0, view);
-
-      // call collectionView childEvent if defined
-      if (typeof childEvents !== 'undefined' && _.isFunction(childEvents[rootEvent])) {
-        childEvents[rootEvent].apply(this, args.slice(1));
-      }
-
-      this.triggerMethod.apply(this, args);
-    });
   },
 
   _getImmediateChildren: function() {

@@ -43,11 +43,5 @@ describe('collection view - reset', function() {
     it('should call "onRender" after rendering', function() {
       expect(this.onRenderStub).to.have.been.called;
     });
-
-    it('should remove the event handlers for the original children', function() {
-      // Needs to be written this way as Backbone < 1.1 used _listeners instead of _listeningTo
-      var listeners = this.collectionView._listeningTo || this.collectionView._listeners;
-      expect(_.toArray(listeners)).to.have.lengthOf(3);
-    });
   });
 });

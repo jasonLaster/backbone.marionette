@@ -9,7 +9,7 @@ describe('collection view', function() {
       tagName: 'span',
       render: function() {
         this.$el.html(this.model.get('foo'));
-        this.trigger('render');
+        this.triggerMethod('render');
       },
       onRender: function() {}
     });
@@ -764,7 +764,7 @@ describe('collection view', function() {
 
       this.sinon.spy(this.collectionView, 'trigger');
       this.childView = this.collectionView.children.findByIndex(0);
-      this.childView.trigger('some:event', 'test', this.model);
+      this.childView.triggerMethod('some:event', 'test', this.model);
     });
 
     it('should bubble up through the parent collection view', function() {
@@ -793,7 +793,7 @@ describe('collection view', function() {
 
       this.sinon.spy(this.collectionView, 'trigger');
       this.childView = this.collectionView.children.findByIndex(0);
-      this.childView.trigger('some:event', 'test', this.model);
+      this.childView.triggerMethod('some:event', 'test', this.model);
     });
 
     it('should bubble up through the parent collection view', function() {
@@ -1051,7 +1051,7 @@ describe('collection view', function() {
 
       this.sinon.spy(this.collectionView, 'trigger');
       this.childView = this.collectionView.children.findByIndex(0);
-      this.childView.trigger('some:event', 'test', this.model);
+      this.childView.triggerMethod('some:event', 'test', this.model);
     });
 
     it('should bubble up through the parent collection view', function() {
@@ -1081,7 +1081,7 @@ describe('collection view', function() {
 
       this.sinon.spy(this.collectionView, 'trigger');
       this.childView = this.collectionView.children.findByIndex(0);
-      this.childView.trigger('some:event', 'test', this.model);
+      this.childView.triggerMethod('some:event', 'test', this.model);
     });
 
     it('should bubble up through the parent collection view', function() {
@@ -1112,7 +1112,7 @@ describe('collection view', function() {
 
       this.sinon.spy(this.collectionView, 'trigger');
       this.childView = this.collectionView.children.findByIndex(0);
-      this.childView.trigger('some:event', 'test', this.model);
+      this.childView.triggerMethod('some:event', 'test', this.model);
     });
 
     it('should bubble up through the parent collection view', function() {

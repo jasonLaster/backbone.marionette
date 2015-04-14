@@ -154,13 +154,13 @@ describe('composite view', function() {
       this.collectionItemTemplateFn = _.template('<% _.each(items, function(item){ %><span><%= item.foo %></span><% }) %>');
       this.emptyTemplateFn = _.template('&nbsp;');
 
-      this.EmptyView = Backbone.Marionette.ItemView.extend({
-        template: this.emptyTemplateFn,
-        tagName: 'hr',
-        onShow: function() {
-          suite.onShow.push('EMPTY');
-        }
-      });
+      // this.EmptyView = Backbone.Marionette.ItemView.extend({
+      //   template: this.emptyTemplateFn,
+      //   tagName: 'hr',
+      //   onShow: function() {
+      //     suite.onShow.push('EMPTY');
+      //   }
+      // });
 
       this.ChildView = Backbone.Marionette.ItemView.extend({
         template: this.collectionItemTemplateFn,
@@ -169,7 +169,7 @@ describe('composite view', function() {
 
       this.CompositeView = Backbone.Marionette.CompositeView.extend({
         childView: this.ChildView,
-        emptyView: this.EmptyView,
+        // emptyView: this.EmptyView,
         template: this.collectionTemplateFn,
         initialize: function() {
           this.render();
@@ -190,7 +190,7 @@ describe('composite view', function() {
     });
 
     it('should call "onShowCallbacks.add"', function() {
-      expect(this.onShow.length === 1).to.be.ok;
+      expect(this.onShow.length === 0).to.be.ok;
     });
   });
 

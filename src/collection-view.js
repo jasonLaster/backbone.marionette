@@ -91,7 +91,6 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     }
 
     if (this._shouldAddChild(child, index)) {
-      this.destroyEmptyView();
       var ChildView = this.getChildView(child);
       this.addChild(child, ChildView, index);
     }
@@ -101,7 +100,6 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
   _onCollectionRemove: function(model) {
     var view = this.children.findByModel(model);
     this.removeChildView(view);
-    this.checkEmpty();
   },
 
   _onBeforeShowCalled: function() {
@@ -186,9 +184,6 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     }
   },
 
-  // Internal reference to what index a `emptyView` is.
-  _emptyViewIndex: -1,
-
   // Internal method. Separated so that CompositeView can append to the childViewContainer
   // if necessary
   _appendReorderedChildren: function(children) {
@@ -199,19 +194,14 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
   // more control over events being triggered, around the rendering
   // process
   _renderChildren: function() {
-    this.destroyEmptyView();
-    this.destroyChildren({checkEmpty: false});
+    this.destroyChildren();
 
     var models = this._filteredSortedModels();
-    if (this.isEmpty(this.collection, {processedModels: models})) {
-      this.showEmptyView();
-    } else {
-      this.triggerMethod('before:render:collection', this);
-      this.startBuffering();
-      this.showCollection(models);
-      this.endBuffering();
-      this.triggerMethod('render:collection', this);
-    }
+    this.triggerMethod('before:render:collection', this);
+    this.startBuffering();
+    this.showCollection(models);
+    this.endBuffering();
+    this.triggerMethod('render:collection', this);
   },
 
   // Internal method to loop through collection and show each child view.
@@ -256,83 +246,6 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     }
     return models;
   },
-
-  // Internal method to show an empty view in place of
-  // a collection of child views, when the collection is empty
-  showEmptyView: function() {
-    var EmptyView = this.getEmptyView();
-
-    if (EmptyView && !this._showingEmptyView) {
-      this.triggerMethod('before:render:empty');
-
-      this._showingEmptyView = true;
-      var model = new Backbone.Model();
-      this.addEmptyView(model, EmptyView);
-
-      this.triggerMethod('render:empty');
-    }
-  },
-
-  // Internal method to destroy an existing emptyView instance
-  // if one exists. Called when a collection view has been
-  // rendered empty, and then a child is added to the collection.
-  destroyEmptyView: function() {
-    if (this._showingEmptyView) {
-      this.triggerMethod('before:remove:empty');
-
-      this.destroyChildren();
-      delete this._showingEmptyView;
-
-      this.triggerMethod('remove:empty');
-    }
-  },
-
-  // Retrieve the empty view class
-  getEmptyView: function() {
-    return this.getOption('emptyView');
-  },
-
-  // Render and show the emptyView. Similar to addChild method
-  // but "add:child" events are not fired, and the event from
-  // emptyView are not forwarded
-  addEmptyView: function(child, EmptyView) {
-
-    // get the emptyViewOptions, falling back to childViewOptions
-    var emptyViewOptions = this.getOption('emptyViewOptions') ||
-                          this.getOption('childViewOptions');
-
-    if (_.isFunction(emptyViewOptions)) {
-      emptyViewOptions = emptyViewOptions.call(this, child, this._emptyViewIndex);
-    }
-
-    // build the empty view
-    var view = this.buildChildView(child, EmptyView, emptyViewOptions);
-
-    view._parent = this;
-
-    // Proxy emptyView events
-    this.proxyChildEvents(view);
-
-    // trigger the 'before:show' event on `view` if the collection view
-    // has already been shown
-    if (this._isShown) {
-      Marionette.triggerMethodOn(view, 'before:show', view);
-    }
-
-    // Store the `emptyView` like a `childView` so we can properly
-    // remove and/or close it later
-    this.children.add(view);
-
-    // Render it and show it
-    this.renderChildView(view, this._emptyViewIndex);
-
-    // call the 'show' method if the collection view
-    // has already been shown
-    if (this._isShown) {
-      Marionette.triggerMethodOn(view, 'show', view);
-    }
-  },
-
   // Retrieve the `childView` class, either from `this.options.childView`
   // or from the `childView` in the object definition. The "options"
   // takes precedence.
@@ -459,25 +372,6 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     return view;
   },
 
-  // check if the collection is empty
-  // or optionally whether an array of pre-processed models is empty
-  isEmpty: function(collection, options) {
-    var models;
-    if (_.result(options, 'processedModels')) {
-      models = options.processedModels;
-    } else {
-      models = this.collection ? this.collection.models : [];
-      models = this._filterModels(models);
-    }
-    return models.length === 0;
-  },
-
-  // If empty, show the empty view
-  checkEmpty: function() {
-    if (this.isEmpty(this.collection)) {
-      this.showEmptyView();
-    }
-  },
 
   // You might need to override this if you've overridden attachHtml
   attachBuffer: function(collectionView) {
@@ -548,7 +442,7 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
     if (this.isDestroyed) { return this; }
 
     this.triggerMethod('before:destroy:collection');
-    this.destroyChildren({checkEmpty: false});
+    this.destroyChildren();
     this.triggerMethod('destroy:collection');
 
     return Marionette.AbstractView.prototype.destroy.apply(this, arguments);
@@ -558,18 +452,11 @@ Marionette.CollectionView = Marionette.AbstractView.extend({
   // is holding on to, if any
   destroyChildren: function(options) {
     var destroyOptions = options || {};
-    var shouldCheckEmpty = true;
     var childViews = this.children.map(_.identity);
 
-    if (!_.isUndefined(destroyOptions.checkEmpty)) {
-      shouldCheckEmpty = destroyOptions.checkEmpty;
-    }
 
     this.children.each(this.removeChildView, this);
 
-    if (shouldCheckEmpty) {
-      this.checkEmpty();
-    }
     return childViews;
   },
 

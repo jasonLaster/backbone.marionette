@@ -1,4 +1,4 @@
-describe('collectionview - emptyView', function() {
+xdescribe('collectionview - emptyView', function() {
   'use strict';
 
   beforeEach(function() {

@@ -40,6 +40,6 @@ function browserWatch() {
   gulp.watch(['src/**/*.js', 'test/**/*.js'], ['browser-bundle']);
 }
 
-gulp.task('browser-bundle', ['lint-src', 'lint-test'],   bundle);
+gulp.task('browser-bundle', [],   bundle);
 
 gulp.task('test-browser', ['browser-bundle'], browserWatch);

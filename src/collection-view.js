@@ -8,14 +8,27 @@ import isNodeAttached       from './utils/isNodeAttached';
 import _getValue            from './utils/_getValue';
 import getOption            from './utils/getOption';
 import MarionetteError      from './error';
-import ViewMixin            from './mixins/view';
+import SharedViewMethodsMixin from './mixins/shared-view-methods';
 import BehaviorsMixin       from './mixins/behaviors';
 import UIMixin              from './mixins/ui';
+import EventsMixin          from './mixins/events';
+import TriggersMixin        from './mixins/triggers';
+import LifecycleMixin       from './mixins/lifecycle';
+import ViewTreeeMixin       from './mixins/view-tree';
 import MonitorDOMRefresh    from './dom-refresh';
 import {
   triggerMethodMany,
   triggerMethodOn
 }                           from './trigger-method';
+
+import normalizeMethods         from './utils/normalizeMethods';
+import mergeOptions             from './utils/mergeOptions';
+import proxyGetOption           from './utils/proxyGetOption';
+import {
+  proxyBindEntityEvents,
+  proxyUnbindEntityEvents
+}                               from './bind-entity-events';
+
 
 // A view that iterates over a Backbone.Collection
 // and renders an individual child view for each model.
@@ -660,7 +673,7 @@ var CollectionView = Backbone.View.extend({
     this.children = new ChildViewContainer();
   },
 
-  // called by ViewMixin destroy
+  // called by SharedViewMethodsMixin destroy
   _removeChildren: function() {
     this.destroyChildren({checkEmpty: false});
   },
@@ -734,8 +747,23 @@ var CollectionView = Backbone.View.extend({
   }
 });
 
-_.extend(CollectionView.prototype, ViewMixin);
-_.extend(CollectionView.prototype, BehaviorsMixin);
-_.extend(CollectionView.prototype, UIMixin);
+_.extend(
+  CollectionView.prototype,
+  SharedViewMethodsMixin,
+  BehaviorsMixin,
+  UIMixin,
+  EventsMixin,
+  TriggersMixin,
+  LifecycleMixin,
+  ViewTreeeMixin,
+);
+
+_.extend(CollectionView.prototype, {
+  normalizeMethods: normalizeMethods,
+  mergeOptions: mergeOptions,
+  getOption: proxyGetOption,
+  bindEntityEvents: proxyBindEntityEvents,
+  unbindEntityEvents: proxyUnbindEntityEvents
+});
 
 export default CollectionView;

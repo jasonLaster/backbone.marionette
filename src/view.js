@@ -3,12 +3,25 @@
 
 import _                  from 'underscore';
 import Backbone           from 'backbone';
-import ViewMixin          from './mixins/view';
+
+import SharedViewMethodsMixin from './mixins/shared-view-methods';
 import RegionsMixin       from './mixins/regions';
 import BehaviorsMixin     from './mixins/behaviors';
 import UIMixin            from './mixins/ui';
+import EventsMixin        from './mixins/events';
+import TriggersMixin      from './mixins/triggers';
+import LifecycleMixin     from './mixins/lifecycle';
+import ViewTreeeMixin     from './mixins/view-tree';
 import MonitorDOMRefresh  from './dom-refresh';
 import _getValue          from './utils/_getValue';
+
+import normalizeMethods         from './utils/normalizeMethods';
+import mergeOptions             from './utils/mergeOptions';
+import proxyGetOption           from './utils/proxyGetOption';
+import {
+  proxyBindEntityEvents,
+  proxyUnbindEntityEvents
+}                               from './bind-entity-events';
 
 // The standard view. Includes view events, automatic rendering
 // of Underscore templates, nested views, and more.
@@ -106,9 +119,24 @@ var View = Backbone.View.extend({
   }
 });
 
-_.extend(View.prototype, ViewMixin);
-_.extend(View.prototype, RegionsMixin);
-_.extend(View.prototype, BehaviorsMixin);
-_.extend(View.prototype, UIMixin);
+_.extend(
+  View.prototype,
+  SharedViewMethodsMixin,
+  RegionsMixin,
+  BehaviorsMixin,
+  UIMixin,
+  EventsMixin,
+  TriggersMixin,
+  LifecycleMixin,
+  ViewTreeeMixin,
+);
+
+_.extend(View.prototype, {
+  normalizeMethods: normalizeMethods,
+  mergeOptions: mergeOptions,
+  getOption: proxyGetOption,
+  bindEntityEvents: proxyBindEntityEvents,
+  unbindEntityEvents: proxyUnbindEntityEvents
+});
 
 export default View;
